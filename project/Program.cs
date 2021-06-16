@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace project
 {
@@ -10,7 +11,7 @@ namespace project
             List<School> schools = new List<School>();
             while (true)
             {
-                Console.WriteLine("1-Add new Item \t 2-search \t 3-exit");
+                Console.WriteLine("1-Add new Item \n 2-search \n 3-Update \n 4-exit");
                 int item = int.Parse(Console.ReadLine());
                 switch (item)
                 {
@@ -21,13 +22,17 @@ namespace project
                         String clas = Console.ReadLine();
                         Console.WriteLine("Section");
                         String sec= Console.ReadLine();
-                        schools.Add(new School(id, clas, sec));
+                        // schools.Add(new School(id, clas, sec));
+                        StreamWriter writer = File.AppendText(@"C:\file\test.txt");
+                        writer.Write(id+" "+clas+" "+sec+"\n");
+                        writer.Close();
+
                         break;
                     case 2:
                         Console.WriteLine("ID");
                         int ids = int.Parse(Console.ReadLine());
                         var status = false;
-                        foreach(School s in schools)
+                        /*foreach(School s in schools)
                         {
                             if (s.ID == ids)
                             {
@@ -41,12 +46,59 @@ namespace project
                         if (status == false)
                         {
                             Console.WriteLine("Nothing");
-                        }
+                        }*/
+                        //  StreamReader reader = new StreamReader(@"C:\file\test.txt");
+                        string[] lines = File.ReadAllLines(@"C:\file\test.txt");
+                        //String data = 
+                        bool staus = false;
+                        for (int i=0;i< lines.Length; i++)
+                        {
+                            String [] spl = lines[i].Split(" ");
+                           
+                            if (int.Parse(spl[0]) == ids)
+                            {
+                                Console.WriteLine("The id: " + spl[0]+ "\n" + "The class: " + spl[1] + "\n the Section: " + spl[2]);
 
+                                staus = true;
+                            }
+                            
+                           
+                        }
+                        if (!staus)
+                        {
+                            Console.WriteLine("Nothing ");
+                        }
+                       
+
+
+
+                        break;
+
+                    case 3:
+                        Console.WriteLine("Id");
+                        int id2 = int.Parse(Console.ReadLine());
+                        string[] lines_up = File.ReadAllLines(@"C:\file\test.txt");
+                        for (int i = 0; i < lines_up.Length; i++)
+                        {
+                            string[] parts = lines_up[i].Split(' ');
+                            if (int.Parse(parts[0]) == id2)
+                            {
+                                Console.WriteLine("The Id: " + parts[0] + "\n Class: " + parts[1] + "\n Section: " + parts[2]);
+                                Console.WriteLine("ID");
+                                int idss = int.Parse(Console.ReadLine());
+                                Console.WriteLine("Class");
+                                String clasq = Console.ReadLine();
+                                Console.WriteLine("Section");
+                                String secs = Console.ReadLine();
+
+                                lines_up[i] = idss+" "+clasq+" "+secs;
+                            }
+                        }
+                        File.WriteAllLines(@"C:\file\test.txt", lines_up);
                         break;
                     
                 }
-                if (item == 3)
+                if (item == 4)
                 {
                     break;
                 }
